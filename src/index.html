@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✅</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'slide-in': 'slideIn 0.3s ease-out',
+                        'fade-out': 'fadeOut 0.3s ease-out',
+                        'bounce-in': 'bounceIn 0.5s ease-out',
+                    },
+                    keyframes: {
+                        slideIn: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1' },
+                            '100%': { opacity: '0' },
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 dark:from-gray-900 dark:to-purple-900 flex items-center justify-center p-4 transition-colors duration-300">
+    <div class="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden animate-slide-in">
+        <header class="relative bg-gradient-to-r from-purple-600 to-pink-600 dark:from-purple-800 dark:to-pink-800 text-white p-8 text-center">
+            <h1 class="text-4xl font-bold mb-2">Todo App</h1>
+            <p class="text-lg opacity-90">Keep track of your daily tasks</p>
+            <button id="theme-toggle" class="absolute top-6 right-6 bg-white/20 hover:bg-white/30 border-2 border-white/30 rounded-full w-12 h-12 flex items-center justify-center transition-all hover:scale-105" aria-label="Toggle dark mode">
+                <span class="theme-icon text-xl">🌙</span>
+            </button>
+        </header>
+
+        <section class="p-6 border-b dark:border-gray-700">
+            <form id="todo-form" class="flex flex-wrap gap-3">
+                <input 
+                    type="text" 
+                    id="todo-input" 
+                    placeholder="What needs to be done?"
+                    autocomplete="off"
+                    required
+                    class="flex-1 px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 outline-none transition-all"
+                >
+                <input 
+                    type="date" 
+                    id="due-date-input" 
+                    title="Due date (optional)"
+                    class="px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 outline-none transition-all"
+                >
+                <select id="priority-select" title="Priority level" class="px-4 py-3 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 outline-none transition-all cursor-pointer">
+                    <option value="low">🟢 Low</option>
+                    <option value="medium" selected>🟡 Medium</option>
+                    <option value="high">🔴 High</option>
+                </select>
+                <button type="submit" id="add-btn" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+                    Add Task
+                </button>
+            </form>
+        </section>
+
+        <section class="min-h-[300px] max-h-[400px] overflow-y-auto">
+            <ul id="todo-list" class="divide-y dark:divide-gray-700">
+                <!-- Todo items will be added dynamically here -->
+            </ul>
+        </section>
+
+        <footer class="flex flex-wrap items-center justify-between p-6 bg-gray-50 dark:bg-gray-900 border-t dark:border-gray-700 gap-4">
+            <div class="text-gray-600 dark:text-gray-400">
+                <span id="active-count" class="font-semibold text-purple-600 dark:text-purple-400">0</span> items left
+            </div>
+            
+            <div class="flex gap-2">
+                <button class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all" data-filter="all">All</button>
+                <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-filter="active">Active</button>
+                <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-all" data-filter="completed">Completed</button>
+            </div>
+            
+            <button id="clear-completed" class="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 px-4 py-2 rounded-lg text-sm font-medium transition-all">
+                Clear completed
+            </button>
+        </footer>
+    </div>
+
+    <style>
+        .filter-btn {
+            @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700;
+        }
+        .filter-btn.active {
+            @apply text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30 border border-purple-300 dark:border-purple-700;
+        }
+        .priority-high { @apply bg-red-500; }
+        .priority-medium { @apply bg-yellow-500; }
+        .priority-low { @apply bg-green-500; }
+        .todo-item {
+            @apply animate-slide-in;
+        }
+        .todo-item.completed {
+            @apply animate-bounce-in;
+        }
+        .todo-item.drag-over {
+            @apply bg-purple-50 dark:bg-purple-900/20;
+        }
+    </style>
+
+    <script src="app.js"></script>
+</body>
+</html>
