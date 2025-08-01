@@ -85,18 +85,25 @@ class TodoApp {
         
         filteredTodos.forEach(todo => {
             const li = document.createElement('li');
-            li.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+            
+            const priorityColors = {
+                high: 'bg-red-500',
+                medium: 'bg-orange-500',
+                low: 'bg-green-500'
+            };
+            
+            li.className = `flex items-center p-4 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 ${todo.completed ? 'opacity-60' : ''}`;
             
             li.innerHTML = `
                 <input 
                     type="checkbox" 
-                    class="todo-checkbox" 
+                    class="w-5 h-5 mr-4 cursor-pointer accent-purple-500" 
                     ${todo.completed ? 'checked' : ''}
                     data-id="${todo.id}"
                 >
-                <span class="priority-indicator priority-${todo.priority || 'medium'}"></span>
-                <span class="todo-text">${this.escapeHtml(todo.text)}</span>
-                <button class="delete-btn" data-id="${todo.id}">
+                <span class="w-1 h-5 rounded mr-3 flex-shrink-0 ${priorityColors[todo.priority || 'medium']}"></span>
+                <span class="flex-1 text-base text-gray-900 dark:text-gray-100 ${todo.completed ? 'line-through' : ''}">${this.escapeHtml(todo.text)}</span>
+                <button class="p-1 rounded text-red-500 hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors duration-200" data-id="${todo.id}">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="18" y1="6" x2="6" y2="18"></line>
                         <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -131,14 +138,14 @@ class TodoApp {
     }
     
     toggleTheme() {
-        const isDarkMode = document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.toggle('dark');
         localStorage.setItem('darkMode', isDarkMode);
     }
     
     loadTheme() {
         const isDarkMode = localStorage.getItem('darkMode') === 'true';
         if (isDarkMode) {
-            document.body.classList.add('dark-mode');
+            document.body.classList.add('dark');
         }
     }
     
