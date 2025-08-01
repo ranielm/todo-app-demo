@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Todo List</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="sun-icon">☀️</span>
+                <span class="moon-icon">🌙</span>
+            </button>
+        </header>
+        
+        <main>
+            <form id="todo-form" class="todo-form">
+                <input 
+                    type="text" 
+                    id="todo-input" 
+                    class="todo-input" 
+                    placeholder="What needs to be done?"
+                    autocomplete="off"
+                    required
+                >
+                <select id="priority-select" class="priority-select">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
+                <button type="submit" class="add-btn">Add</button>
+            </form>
+            
+            <div class="todo-container">
+                <ul id="todo-list" class="todo-list">
+                    <!-- Todo items will be dynamically added here -->
+                </ul>
+            </div>
+            
+            <div class="stats">
+                <p id="todo-count" class="todo-count">
+                    <span id="remaining-count">0</span> items left
+                </p>
+                <div class="filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+                <button id="clear-completed" class="clear-completed">Clear completed</button>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
